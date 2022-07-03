@@ -17,7 +17,7 @@ def readsensor(temp, humidity):
         temp = sensor.temperature
         humidity = sensor.humidity
         logging.debug("Temperature: {}*C   Humidity: {}% ".format(temp, humidity))
-        return
+        return temp, humidity
     except RuntimeError as error:
         logging.debug(error.args[0])
         return

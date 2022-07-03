@@ -3,12 +3,13 @@ from time import sleep          # import function sleep for delay
 import logging
 from detection import objectdetection as od
 from temperature import thermalsensor as ts 
-from sms import twilioagent sms
+from sms import twilioagent as sms
 
 logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-9s) %(message)s',)
 
-to_number = '+19175824874'
+TO_NUMBER = '+19175824874'
+TEMP_THRESHOLD = 19
 
 def cleanup():
     ts.cleanup()
@@ -22,9 +23,13 @@ if __name__ == '__main__':
     temperature = 0
     humidity = 0
     
+    # sleep for 5 seconds for sensors to initialize
+    sleep(5)
+    
     while True:
         logging.debug('calling ts.read()')
-        ts.readsensor(temperature, humidity)
+        temperature, humidity = ts.readsensor(temperature, humidity)
+        logging.debug("Temperature: {}*C   Humidity: {}% ".format(temperature, humidity))
         logging.debug('returned from ts.read()')
 
         logging.debug('calling detect_object()')
@@ -32,9 +37,11 @@ if __name__ == '__main__':
         logging.debug('returned from detect_object()')
         
         # if objects found, then break from while
-        if (retVal):
-            msgbody = "Sadoki lifeguard alert: Occupants in car with temperature: " + temperature
-            sms.sendsms(msgbody, to_number)
+        if (retVal and (temperature > TEMP_THRESHOLD)):
+            logging.debug('inside the alert condition')
+            msgbody = "Sadoki lifeguard alert: Occupants in car with temperature: " + str(temperature)
+            logging.debug(msgbody)
+            sms.sendsms(msgbody, TO_NUMBER)
             break
         
         # sleep for 1 minute
