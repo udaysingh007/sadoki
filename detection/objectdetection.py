@@ -5,6 +5,7 @@ import numpy as np
 import time
 from imutils.video import VideoStream
 from detection import processDNN
+from constants import const as cn
 import argparse
 import datetime
 import imutils
@@ -13,13 +14,14 @@ import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-9s) %(message)s',)
 
-
 # load YOLO and DEEP NEURAL NETWORK
 net =  cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
 
+# load up all the class names
 classes = []
 with open("coco.names","r") as f:
 	classes = [line.strip() for line in f.readlines()]
+
 layer_names = net.getLayerNames()
 outputlayers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 colors= np.random.uniform(0,255,size=(len(classes),3))
@@ -40,7 +42,7 @@ def detect_object():
 	# initialize the first frame in the video stream
 	firstFrame = None
 
-	retVal = 0
+	retVal = {cn.PERSON: 0, cn.DOG: 0, cn.CAT: 0}
 		
 	# grab the current frame and initialize the occupied/unoccupied
 	# text
@@ -52,11 +54,21 @@ def detect_object():
 		return retVal
 
 	# identify objects in the frame
-	retVal = processDNN.found_object_by_name(frame, cv2, net, outputlayers, classes, colors, "person")
+	objectnames = [cn.PERSON, cn.DOG, cn.CAT]
+	retVal = processDNN.find_object_by_name(frame, cv2, net, outputlayers, classes, colors, objectnames)
+	print(retVal)
 		
-	# show the frame and record if the user presses a key
-	# cv2.imshow("people view", frame)
-	if retVal :
-		logging.debug('Found person')
+	if (retVal.get(cn.PERSON) or retVal.get(cn.DOG) or retVal.get(cn.CAT)):
+		logging.debug('Found car occupants; human: ' + str(retVal.get(cn.PERSON)) 
+		                                  + ' pets:' + str(retVal.get(cn.DOG)+retVal.get(cn.CAT)))
+		
+		# rotate the image by 180, as the webcam is offset by 180 degrees
+		rotate_image(frame, 180)
+		
+		cv2.imshow("people view", frame)
+		cv2.waitKey(0) 
+  
+		#closing all open windows 
+		cv2.destroyAllWindows() 
 	
 	return retVal
