@@ -1,11 +1,12 @@
 import RPi.GPIO as GPIO         # using Rpi.GPIO module
 from time import sleep          # import function sleep for delay
 import logging
+from constants import const as cn
 from detection import objectdetection as od
 from temperature import thermalsensor as ts 
-from constants import const as cn
 from sms import twilioagent as sms
 from led import status as led
+from motion import msensor as ms
 
 logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-9s) %(message)s',)
@@ -22,7 +23,7 @@ if __name__ == '__main__':
     humidity = 0
     
     # turn on the green LED
-    led.alarmOff()
+    # led.alarmOff()
     
     # sleep for 5 seconds for sensors to initialize
     sleep(5)
@@ -33,10 +34,14 @@ if __name__ == '__main__':
         logging.debug("Temperature: {}*C   Humidity: {}% ".format(temperature, humidity))
         logging.debug('returned from ts.read()')
 
+        # indicate that were entering the processing mode
+        led.greenBlinkerOn()
+        
+        # detect presence of kids or dogs or cats
         logging.debug('calling detect_object()')
         retVal = od.detect_object()
         logging.debug('returned from detect_object()')
-        
+                
         # if objects found, then break from while
         if (temperature > cn.TEMP_THRESHOLD):
             if (retVal.get(cn.PERSON) or retVal.get(cn.DOG) or retVal.get(cn.CAT)):
@@ -54,9 +59,12 @@ if __name__ == '__main__':
                 # sms.sendsms(msgbody, cn.TO_NUMBER)
                 break
         
+        # indicate that we are done processing and all is good
+        led.greenBlinkerOff()
+        
         # sleep for 1 minute
-        logging.debug('sleeping for 1 min')
-        sleep(60)
+        logging.debug('wait for the IR sensor or for 30 seconds')
+        ms.waitForMotion(30)
     
     logging.debug('Exiting main')
     

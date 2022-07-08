@@ -1,0 +1,17 @@
+[Unit]
+Description=Sadoki service
+After=graphical.target
+Requires=network.target
+
+[Service]
+Type=idle
+
+User=pi
+ExecStart=/usr/bin/python3 /home/pi/sadoki/main.py > /home/pi/sadoki/output.log
+
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
+

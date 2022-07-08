@@ -2,7 +2,7 @@
 
 import cv2
 import numpy as np
-import time
+from time import sleep          # import function sleep for delay
 from imutils.video import VideoStream
 from detection import processDNN
 from constants import const as cn
@@ -15,11 +15,11 @@ logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-9s) %(message)s',)
 
 # load YOLO and DEEP NEURAL NETWORK
-net =  cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
+net =  cv2.dnn.readNet(cn.YOLOV3_WEIGHTS, cn.YOLOV3_CONFIG)
 
 # load up all the class names
 classes = []
-with open("coco.names","r") as f:
+with open(cn.COCO_NAMES,"r") as f:
 	classes = [line.strip() for line in f.readlines()]
 
 layer_names = net.getLayerNames()
@@ -63,10 +63,13 @@ def detect_object():
 		                                  + ' pets:' + str(retVal.get(cn.DOG)+retVal.get(cn.CAT)))
 		
 		# rotate the image by 180, as the webcam is offset by 180 degrees
-		rotate_image(frame, 180)
+		frame = rotate_image(frame, 180)
 		
 		cv2.imshow("people view", frame)
-		cv2.waitKey(0) 
+		
+		# wait for user input
+		# cv2.waitKey(0) 
+		sleep(30)
   
 		#closing all open windows 
 		cv2.destroyAllWindows() 
