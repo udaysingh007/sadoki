@@ -68,8 +68,8 @@ def detect_object():
 		cv2.imshow("people view", frame)
 		
 		# wait for user input
-		# cv2.waitKey(0) 
-		sleep(30)
+		cv2.waitKey(0) 
+		# sleep(30)
   
 		#closing all open windows 
 		cv2.destroyAllWindows() 
