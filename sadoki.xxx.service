@@ -1,20 +1,21 @@
 [Unit]
-Description=Sadoki service
+Description=Sadoki XXX service
 After=graphical.target
 Requires=network.target
 
 [Service]
-Type=idle
+Type=simple
 
 User=pi
 WorkingDirectory=/home/pi/sadoki
 Environment=LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libatomic.so.1
-ExecStart=/usr/bin/python3 /home/pi/sadoki/main.py > /home/pi/sadoki/output.log 2>&1
+ExecStart=/usr/bin/python3 /home/pi/sadoki/main.py
 ExecStop=/usr/bin/python3 /home/pi/sadoki/cleanup.py
+RemainAfterExit=true
 
 Restart=always
 RestartSec=60
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target
 

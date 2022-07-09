@@ -16,9 +16,9 @@ def cleanup():
 #    GPIO.cleanup()
     
 if __name__ == '__main__':
-    
+
     logging.debug('Start of main')
-    
+ 
     temperature = 0
     humidity = 0
     
