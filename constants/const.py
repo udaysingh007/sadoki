@@ -2,9 +2,14 @@
 import board
 
 # paths of weights, config, and coco.names
-YOLOV3_WEIGHTS = "/home/pi/sadoki/yolov3.weights"
-YOLOV3_CONFIG = "/home/pi/sadoki/yolov3.cfg"
-COCO_NAMES = "/home/pi/sadoki/coco.names"
+HOME_DIR="/home/pi/sadoki/"
+YOLOV3_WEIGHTS = HOME_DIR+"yolov3.weights"
+YOLOV3_CONFIG = HOME_DIR+"yolov3.cfg"
+COCO_NAMES = HOME_DIR+"coco.names"
+LOGO_IMAGE = HOME_DIR+"sadoki_logo.jpg"
+
+# GUI STRING
+GUI_TITLE = "Sadoki"
 
 # for SMS messaging
 ACCOUNT_SID = 'AC90500fd622ea00db67e19e8e44854c30'
