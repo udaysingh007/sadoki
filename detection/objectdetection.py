@@ -51,7 +51,7 @@ def detect_object():
 	# if the frame could not be grabbed, then we have reached the end
 	# of the video
 	if frame is None:
-		return retVal
+		return retVal, frame
 
 	# identify objects in the frame
 	objectnames = [cn.PERSON, cn.DOG, cn.CAT]
@@ -74,4 +74,27 @@ def detect_object():
 		#closing all open windows 
 		cv2.destroyAllWindows() 
 	
-	return retVal
+	return retVal, frame
+
+def addTempAndGPS(frame, temperature, latitude, longitude):
+	
+	font = cv2.FONT_HERSHEY_PLAIN
+
+	boxWidth = 200
+	boxHeight = 16
+	gap = 5
+	color = (10, 10, 10)
+	
+	# add temperature on the image
+	cv2.rectangle(frame,(0,0),(boxWidth,boxHeight),color,2)
+	cv2.putText(frame,"Temperature: " + str(temperature),(2,boxHeight-2),font,1,color,2)
+
+	# add latitude on the image
+	# TODO: Need to properly format the latitude
+	cv2.rectangle(frame,(0,boxHeight+gap),(boxWidth,2*boxHeight+gap),color,2)
+	cv2.putText(frame,"Latitude (GPS): " + str(latitude),(2,2*boxHeight+gap-2),font,1,color,2)
+
+	# add longitude on the image
+	# TODO: Need to properly format the longitude
+	cv2.rectangle(frame,(0,2*(boxHeight+gap)),(boxWidth,3*boxHeight+2*gap),color,2)
+	cv2.putText(frame,"Longitude (GPS): " + str(longitude),(2,3*boxHeight+2*gap-2),font,1,color,2)

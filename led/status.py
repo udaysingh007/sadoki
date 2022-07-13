@@ -11,7 +11,8 @@ def alarmOn():
 	# turn on RED and turn off GREEN
 	redLED.blink(on_time=0.1, off_time=0.1)
 	greenLED.off()
-	buzzer.beep(on_time=0.1, off_time=0.1)
+	if not cn.QUIET_MODE:
+		buzzer.beep(on_time=0.1, off_time=0.1)
 
 def alarmOff():
 	# turn off RED and turn on GREEN
@@ -22,7 +23,8 @@ def alarmOff():
 def greenBlinkerOn():
 	greenLED.off()
 	greenLED.blink(on_time=0.1, off_time=0.1)
-	buzzer.beep(on_time=0.1, off_time=0.1, n=1)
+	if not cn.QUIET_MODE:
+		buzzer.beep(on_time=0.1, off_time=0.1, n=1)
 	
 def greenBlinkerOff():
 	greenLED.off()

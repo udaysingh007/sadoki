@@ -1,6 +1,10 @@
 # const.py - list of all constants
 import board
 
+# turn off sounds and sms while in quiet mode
+QUIET_MODE = True
+SEND_MMS = True
+
 # paths of weights, config, and coco.names
 HOME_DIR="/home/pi/sadoki/"
 YOLOV3_WEIGHTS = HOME_DIR+"yolov3.weights"

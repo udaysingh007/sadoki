@@ -37,7 +37,7 @@ def sadoki_thread(name="Sadoki Thread"):
         
         # detect presence of kids or dogs or cats
         logging.debug('calling detect_object()')
-        retVal = od.detect_object()
+        retVal, frame = od.detect_object()
         logging.debug('returned from detect_object()')
                 
         # if objects found, then break from while
@@ -54,7 +54,12 @@ def sadoki_thread(name="Sadoki Thread"):
                 # send out SMS
                 msgbody = "Sadoki lifeguard alert: Occupants in car with temperature: " + str(temperature)
                 logging.debug(msgbody)
-                # sms.sendsms(msgbody, cn.TO_NUMBER)
+                if not cn.QUIET_MODE:
+                    sms.sendsms(msgbody, cn.TO_NUMBER)
+                
+                # send out MMS as well
+                if cn.SEND_MMS:
+                        
                 break
         
         # indicate that we are done processing and all is good
