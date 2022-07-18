@@ -1,5 +1,9 @@
 # const.py - list of all constants
 import board
+import pyaudio
+
+# Global flag to stop threads
+EXIT_THREADS = False
 
 # turn off sounds and sms while in quiet mode
 QUIET_MODE = True
@@ -11,6 +15,7 @@ YOLOV3_WEIGHTS = HOME_DIR+"yolov3.weights"
 YOLOV3_CONFIG = HOME_DIR+"yolov3.cfg"
 COCO_NAMES = HOME_DIR+"coco.names"
 LOGO_IMAGE = HOME_DIR+"sadoki_logo.jpg"
+LOCAL_SNAPSHOT_FILENAME = HOME_DIR+"snapshot.jpg"
 
 # GUI STRING
 GUI_TITLE = "Sadoki"
@@ -35,4 +40,13 @@ GPIO_BUZZER = 27
 PERSON = "person"
 DOG = "dog"
 CAT = "cat"
+
+# speech processing related constants
+AUDIO_FORMAT = pyaudio.paInt16 	# 16-bit resolution
+AUDIO_NUM_CHANNELS = 1 			# 1 channel
+AUDIO_SAMPLING_RATE = 44100 	# 44.1kHz sampling rate
+AUDIO_CHUNK_SIZE = 4096 		# 2^12 samples for buffer
+AUDIO_RECORDING_TIME = 3 		# seconds to record
+AUDIO_DEVICE_INDEX = 2 			# device index found by p.get_device_info_by_index(ii)
+AUDIO_TEMP_OUTPUT_FILE = HOME_DIR+'test1.wav' 
 

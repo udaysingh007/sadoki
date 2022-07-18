@@ -28,3 +28,12 @@ def greenBlinkerOn():
 	
 def greenBlinkerOff():
 	greenLED.off()
+
+def beepOnce():
+	buzzer.beep(on_time=0.1, off_time=0.1, n=1)
+	
+def greenBlinkOnce():
+	greenLED.blink(on_time=0.1, off_time=0.1, n=3)
+	
+def redBlinkOnce():
+	redLED.blink(on_time=0.1, off_time=0.1, n=3)
