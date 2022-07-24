@@ -50,3 +50,5 @@ AUDIO_RECORDING_TIME = 3 		# seconds to record
 AUDIO_DEVICE_INDEX = 2 			# device index found by p.get_device_info_by_index(ii)
 AUDIO_TEMP_OUTPUT_FILE = HOME_DIR+'test1.wav' 
 
+# GPS
+UART_PORT="/dev/ttyAMA0"

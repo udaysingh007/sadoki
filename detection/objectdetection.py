@@ -63,16 +63,16 @@ def detect_object():
 		                                  + ' pets:' + str(retVal.get(cn.DOG)+retVal.get(cn.CAT)))
 		
 		# rotate the image by 180, as the webcam is offset by 180 degrees
-		frame = rotate_image(frame, 180)
+		# frame = rotate_image(frame, 180)
 		
-		cv2.imshow("people view", frame)
+		# cv2.imshow("people view", frame)
 		
 		# wait for user input
-		cv2.waitKey(0) 
+		# cv2.waitKey(0) 
 		# sleep(30)
   
-		#closing all open windows 
-		cv2.destroyAllWindows() 
+		# closing all open windows 
+		# cv2.destroyAllWindows() 
 	
 	return retVal, frame
 
