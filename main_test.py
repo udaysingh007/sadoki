@@ -53,23 +53,28 @@ def callback(in_data, frame_count, time_info, status):
 def takeAction(line):
     acted = True
     
-    if (line.find("eep") >= 0):
+    if (line.find("help") >= 0):
+        led.redBlinkOnce()
+        led.greenBlinkOnce()
         led.beepOnce()
-    else:
-        if (line.find("ink") >= 0):
-            if (line.find("gree") >= 0):
-                led.greenBlinkOnce()
-            else: 
-                if (line.find("red") >= 0):
-                    led.redBlinkOnce()
-                else:
-                    led.greenBlinkOnce()
-                    led.redBlinkOnce()
-        else:
-            acted = False
+        return
+    
+    if (line.find("eep") >= 0) or (line.find("sound")>=0) or (line.find("alarm")>=0):
+        led.beepOnce()
+        return
         
-    if not acted:
-        print("No action taken, as there no action in the STT")
+    if (line.find("ink") >= 0):
+        if (line.find("gree") >= 0):
+            led.greenBlinkOnce()
+        else: 
+            if (line.find("red") >= 0):
+                led.redBlinkOnce()
+            else:
+                led.greenBlinkOnce()
+                led.redBlinkOnce()
+        return
+        
+    print("No action taken, as there no action in the STT")
             
     
 if __name__ == '__main__':
@@ -121,37 +126,40 @@ if __name__ == '__main__':
                                 frames_per_buffer=chunk)
 
             frames = []
-            print("start recording")        
+            print("start recording")
             # loop through stream and append audio chunks to frame array
             for ii in range(0,int((samp_rate/chunk)*record_secs)):
                 data = stream.read(chunk,exception_on_overflow=False)
                 frames.append(data)
             print("finished recording")
 
-            # save the audio frames as .wav file            
+            # save the audio frames as .wav file
             wavefile = wave.open(wav_output_filename,'wb')
             wavefile.setnchannels(chans)
             wavefile.setsampwidth(audio.get_sample_size(form_1))
             wavefile.setframerate(samp_rate)
             wavefile.writeframes(b''.join(frames))
             wavefile.close()
-            
-            #sleep a second for the file to be written
-            sleep(3)
-            
+
             # convert the .wav file into text
-            print("start speech-to-text")        
-            s = subprocess.run(["spchcat", wav_output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            print("start speech-to-text")
+            s = subprocess.run(["spchcat", "--stream", "1600", \
+				"--hot_words", "help:20,red:20,green:20,blink:20,sound:20,alarm:20", \
+				wav_output_filename], stdout=subprocess.PIPE,\
+				stderr=subprocess.PIPE, text=True)
             print(s.stdout)
             takeAction(s.stdout)
-            print("finished speech-to-text")        
-            
+            print("finished speech-to-text")
+
             # delete the file as it is no longer required
             subprocess.run(["rm", "-rf", wav_output_filename], capture_output=True)
 
             # stop the stream, close it, and terminate the pyaudio instantiation
             stream.stop_stream()
             stream.close()
+
+            #sleep a second for the file to be written
+            sleep(0.2)
 
         audio.terminate()
         

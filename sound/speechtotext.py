@@ -91,7 +91,7 @@ def processSpeech(e):
 		for ii in range(0,int((samp_rate/chunk)*record_secs)):
 			data = stream.read(chunk,exception_on_overflow=False)
 			frames.append(data)
-		print("processSpeech: finished recording")
+		logging.debug("processSpeech: finished recording")
 
 		# save the audio frames as .wav file            
 		wavefile = wave.open(wav_output_filename,'wb')
@@ -101,18 +101,24 @@ def processSpeech(e):
 		wavefile.writeframes(b''.join(frames))
 		wavefile.close()
 
-		#sleep a second for the file to be written
-		sleep(1)
+		# sleep a second for the file to be written
+		# sleep(1)
 
 		# convert the .wav file into text
 		logging.debug("processSpeech:start speech-to-text")        
-		s = subprocess.run(["spchcat", wav_output_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+		s = subprocess.run(["spchcat", "--stream", "1600", \
+			"--hot_words", "help:20,red:20,green:20,blink:20,sound:20,alarm:20", \
+			wav_output_filename], stdout=subprocess.PIPE,\
+			stderr=subprocess.PIPE, text=True)
 		logging.debug(f'processSpeech: STDOUT: {s.stdout}')
 		takeAction(s.stdout, e)
 		logging.debug("processSpeech:finished speech-to-text")        
 
 		# delete the file as it is no longer required
 		subprocess.run(["rm", "-rf", wav_output_filename], capture_output=True)
+
+		#sleep a second for the file to be written
+		sleep(0.2)
 
 	# stop the stream, close it, and terminate the pyaudio instantiation
 	stream.stop_stream()
