@@ -83,7 +83,7 @@ def addTempAndGPS(frame, temperature, latitude, longitude):
 	boxWidth = 200
 	boxHeight = 16
 	gap = 5
-	color = (10, 10, 10)
+	color = (255, 10, 10)
 	
 	# add temperature on the image
 	cv2.rectangle(frame,(0,0),(boxWidth,boxHeight),color,2)

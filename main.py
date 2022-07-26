@@ -7,6 +7,7 @@ from constants import const as cn
 from detection import objectdetection as od
 from temperature import thermalsensor as ts 
 from sms import twilioagent as sms
+from sms import postImages as pImages
 from led import status as led
 from motion import msensor as ms
 from sound import speechtotext as speechtx
@@ -74,22 +75,29 @@ def sadoki_thread(e, name="Sadoki Thread"):
                     + "| Latitude: " + str (lat) \
                     + "| Longitude: " + str (lng)
                 logging.debug(msgbody)
-                if not cn.QUIET_MODE:
-                    sms.sendsms(msgbody, cn.TO_NUMBER)
-                
-                    # send out MMS as well
-                    if cn.SEND_MMS:
-                        # add temperature and GPS coordinates on to the image
-                        od.addTempAndGPS(frame, temperature, lat, lng)
-
-                        # write the image snapshot to a local file
-                        cv2.imwrite(cn.LOCAL_SNAPSHOT_FILENAME, frame)
+                if cn.SEND_SMS:
+                    try:
+                        sms.sendsms(msgbody, cn.TO_NUMBER)
+                    except e:
+                        logging.debug("Exception while sendSMS: ", e)
                         
+                # send out MMS as well
+                if cn.SEND_MMS:
+                    # add temperature and GPS coordinates on to the image
+                    od.addTempAndGPS(frame, temperature, lat, lng)
+
+                    # write the image snapshot to a local file
+                    cv2.imwrite(cn.LOCAL_SNAPSHOT_FILENAME, frame)
+                    
+                    try:
                         # convert the local file into a publicly accessible URL for Twilio
                         # POST to Google Drive or a specicalized web service for Sadoki
-                        imageurl = "EMPTY FOR NOW"
+                        imageurl = pImages.uploadFile(cn.LOCAL_SNAPSHOT_FILENAME)
+                        
                         sms.sendmms(msgbody, imageurl, cn.TO_NUMBER)
-                
+                    except e:
+                        logging.debug("Exception while sendmms: ", e)
+                        
                 # This logic needs to change to continue and not exit
                 # But for now (Jul 18th '22), this will suffice as a clean exit
                 cn.EXIT_THREADS = True

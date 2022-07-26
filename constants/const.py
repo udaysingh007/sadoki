@@ -2,11 +2,15 @@
 import board
 import pyaudio
 
+# Serial Number of this unit
+SADOKI_SERIAL_NUM = "00000001"
+
 # Global flag to stop threads
 EXIT_THREADS = False
 
 # turn off sounds and sms while in quiet mode
 QUIET_MODE = True
+SEND_SMS = True
 SEND_MMS = True
 
 # paths of weights, config, and coco.names
@@ -52,3 +56,9 @@ AUDIO_TEMP_OUTPUT_FILE = HOME_DIR+'test1.wav'
 
 # GPS
 UART_PORT="/dev/ttyAMA0"
+
+# constants for CLOUDINARY
+CLOUDINARY_NAME = "sadoki-monitor-kids-and-pets-left-behind-in-the-car" 
+CLOUDINARY_API_KEY = "989645534825673"
+CLOUDINARY_API_SECRET = "xAP3vUE7pbgkZcwRqbyiM_DcpAs" 
+CLOUDINARY_TAG = "SADOKI_"+SADOKI_SERIAL_NUM

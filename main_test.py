@@ -2,10 +2,12 @@ import RPi.GPIO as GPIO         # using Rpi.GPIO module
 from time import sleep          # import function sleep for delay
 import threading
 import logging
+import cloudinary
 from constants import const as cn
 from detection import objectdetection as od
 from temperature import thermalsensor as ts 
 from sms import twilioagent as sms
+from sms import postImages as pImages
 from led import status as led
 from motion import msensor as ms
 # from gui import display as dp
@@ -13,7 +15,6 @@ import cv2
 import pyaudio
 import wave
 import os, sys, subprocess, contextlib
-
 
 logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-9s) %(message)s',)
@@ -76,9 +77,7 @@ def takeAction(line):
         
     print("No action taken, as there no action in the STT")
             
-    
-if __name__ == '__main__':
-
+def test_stt_audio():
     form_1 = pyaudio.paInt16 # 16-bit resolution
     chans = 1 # 1 channel
     samp_rate = 44100 # 44.1kHz sampling rate
@@ -162,5 +161,16 @@ if __name__ == '__main__':
             sleep(0.2)
 
         audio.terminate()
-        
     
+    
+if __name__ == '__main__':
+
+    # test audio speech to text (STT)
+    # test_stt_audio()
+    
+    # convert the local file into a publicly accessible URL for Twilio
+    # POST to Google Drive or a specicalized web service for Sadoki
+    imageurl = pImages.uploadFile(cn.LOCAL_SNAPSHOT_FILENAME)
+
+    sms.sendmms("Test", imageurl, cn.TO_NUMBER)
+
