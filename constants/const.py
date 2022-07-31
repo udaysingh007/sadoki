@@ -36,9 +36,9 @@ TEMP_THRESHOLD = 19
 # GPIO PINS used
 GPIO_RED_LED = 17
 GPIO_GREEN_LED = 18
-GPIO_IR_SENSOR = 22
+GPIO_IR_SENSOR = 24 # previously was 22 (before the cell HAT)
 DHT_PIN = 23  # board.D23
-GPIO_BUZZER = 27
+GPIO_BUZZER = 25 # previously was 27 (before the cell HAT)
 
 # string constants
 PERSON = "person"

@@ -10,6 +10,7 @@ from sms import twilioagent as sms
 from sms import postImages as pImages
 from led import status as led
 from motion import msensor as ms
+from sound import texttospeech as tts
 # from gui import display as dp
 import cv2
 import pyaudio
@@ -170,7 +171,42 @@ if __name__ == '__main__':
     
     # convert the local file into a publicly accessible URL for Twilio
     # POST to Google Drive or a specicalized web service for Sadoki
-    imageurl = pImages.uploadFile(cn.LOCAL_SNAPSHOT_FILENAME)
+    # imageurl = pImages.uploadFile(cn.LOCAL_SNAPSHOT_FILENAME)
+    # sms.sendmms("Test", imageurl, cn.TO_NUMBER)
+    
+    logging.debug("About to blink green")
+    c = input('press enter')
+    tts.speakOut("Blinking Green L.E.D!  Blinking Green L.E.D!")
+    led.greenBlinkerOn()
+    sleep(3)
+    led.greenBlinkerOff()
+    
+    logging.debug("About to blink red")
+    c = input('press enter')
+    tts.speakOut("Blinking Red L.E.D!  Blinking Red L.E.D!")
+    led.redBlinkerOn()
+    sleep(3)
+    led.redBlinkerOff()
 
-    sms.sendmms("Test", imageurl, cn.TO_NUMBER)
+    logging.debug("About to blink all LEDs")
+    c = input('press enter')
+    tts.speakOut("Blinking all L.E.Ds!  Blinking all L.E.D!")
+    led.redBlinkerOn()
+    led.greenBlinkerOn()
+    sleep(3)
+    led.redBlinkerOff()
+    led.greenBlinkerOff()
+    
+    logging.debug("Sound alarm")
+    c = input('press enter')
+    tts.speakOut("Danger!  Danger!   Occcupants left behind in the car!")
+    led.redBlinkerOn()
+    led.greenBlinkerOn()
+    led.beepOnce()
+    sleep(3)
+    tts.speakOut("Danger!  Danger!   Occcupants left behind in the car!")
+    led.redBlinkerOff()
+    led.greenBlinkerOff()
+    
 
+    

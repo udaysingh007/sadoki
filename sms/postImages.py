@@ -29,8 +29,6 @@ def cleanup(tag=cn.CLOUDINARY_TAG):
     # print("Done!")
 
 
-print ("Tag: ", cn.CLOUDINARY_TAG)
-
-cleanup()
-
-uploadFile("/home/pi/sadoki/snapshot.jpg")
+# print ("Tag: ", cn.CLOUDINARY_TAG)
+# cleanup()
+# uploadFile("/home/pi/sadoki/snapshot.jpg")

@@ -26,8 +26,17 @@ def greenBlinkerOn():
 	if not cn.QUIET_MODE:
 		buzzer.beep(on_time=0.1, off_time=0.1, n=1)
 	
+def redBlinkerOn():
+	redLED.off()
+	redLED.blink(on_time=0.1, off_time=0.1)
+	if not cn.QUIET_MODE:
+		buzzer.beep(on_time=0.1, off_time=0.1, n=1)
+
 def greenBlinkerOff():
 	greenLED.off()
+
+def redBlinkerOff():
+	redLED.off()
 
 def beepOnce():
 	buzzer.beep(on_time=0.1, off_time=0.1, n=1)
